@@ -1,0 +1,68 @@
+version: "3.2"
+services:
+  server:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    image: phuc/nodejs-mysql-app
+    depends_on:
+      - mysql
+    networks:
+      - frontend
+      - backend
+    environment:
+      - MYSQL_HOST=moe-mysql-app
+      - MYSQL_USER=phucuser
+      - MYSQL_PASS=phucpass
+      - MYSQL_DB=nodejs_api
+    volumes:
+      - ./www/:/var/www/html/
+    ports:
+      - "5000:5000"
+    container_name: server
+  mysql:
+    image: mysql:5.7
+    networks:
+      - backend
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=phucuser
+      - MYSQL_PASSWORD=phucpass
+      - MYSQL_DATABASE=nodejs_api
+    container_name: moe-mysql-app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:4.7
+    depends_on:
+      - mysql
+    networks:
+      - backend
+    ports:
+      - "30002:80"
+    environment:
+      - PMA_HOST=moe-mysql-app
+      - PMA_PORT= 3306
+    volumes:
+      - /sessions
+    container_name: moe-phpmyadmin-app
+  web-client:
+    build:
+      context: ./web-client
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    expose:
+      - "3000"
+    volumes:
+      - ./web-client:/opt/app:delegated
+      - ./web-client/package.json:/opt/package.json
+      - ./web-client/package-lock.json:/opt/package-lock.json
+      - notused:/opt/app/node_modules
+    networks:
+      - frontend
+volumes: 
+  notused:
+networks:
+  frontend:
+  backend:
+  
+  
