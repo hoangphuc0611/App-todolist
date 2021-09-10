@@ -32,7 +32,7 @@ function ChatInput({ id, chatRef }) {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Nhập gì đó"
+          placeholder="Enter something..."
         />
         <button hidden type="submit" onClick={sendMessage}>
           SEND

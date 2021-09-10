@@ -31,13 +31,17 @@ const CardHeader = styled.div`
     cursor: pointer;
     font-size: 18px;
   }
+  span {
+    font-weight: bold;
+  }
 `;
 const ActionContainer = styled.div`
   position: absolute;
-  top: -46px;
+  top: -54px;
   right: 20px;
   background-color: #3480eb;
-  border-radius: 2px;
+  border: 1.6px solid #111;
+  border-radius: 4px;
   padding: 4px;
 `;
 const ActionContent = styled.div`
@@ -47,6 +51,7 @@ const ActionContent = styled.div`
   align-items: center;
   margin-top: 4px;
   cursor: pointer;
+  padding: 2px;
   span {
     margin-left: 4px;
   }
@@ -64,6 +69,14 @@ const DragItem = styled.div`
   grid-gap: 20px;
   flex-direction: column;
   position: relative;
+`;
+const TimeCreate = styled.div`
+  display: flex;
+  align-items: center;
+  ion-icon {
+    font-size: 17px;
+    margin-right: 2px;
+  }
 `;
 const ListItem = ({ item, index }) => {
   const [openAction, setOpenAction] = useState(false);
@@ -120,6 +133,10 @@ const ListItem = ({ item, index }) => {
                 <Author>
                   <Avatar src={`${item?.userImageCreator}`} />
                 </Author>
+                <TimeCreate>
+                  <ion-icon name="calendar-outline"></ion-icon>
+                  <span>{item?.createdAt?.split("T")[0]}</span>
+                </TimeCreate>
               </CardFooter>
             </DragItem>
           );

@@ -40,10 +40,10 @@ function DraggableElement({ prefix, elements, id }) {
         <ModelContent>
           <input
             type="text"
-            placeholder="Nhập nội dung"
+            placeholder="New task"
             onChange={(e) => setInput(e.target.value)}
           />
-          <button onClick={handleAddTask}>Xác nhận</button>
+          <button onClick={handleAddTask}>Add</button>
         </ModelContent>
       )}
       <Droppable droppableId={`${prefix}`}>
@@ -64,6 +64,7 @@ const ColumnHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  color: #fff;
   span {
     text-transform: uppercase;
     font-weight: bold;
@@ -77,7 +78,7 @@ const ColumnHeader = styled.div`
 const DroppableStyles = styled.div`
   padding: 10px;
   border-radius: 6px;
-  background: #d4d4d4;
+  background: #3480eb;
 `;
 const ModelContent = styled.div`
   display: flex;
@@ -85,22 +86,30 @@ const ModelContent = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 10px 0;
-  border: 1px solid #fff;
+  border: 2px solid #fff;
   margin-bottom: 10px;
   input {
+    width: 90%;
     margin-bottom: 10px;
     outline: none;
     height: 20px;
     border-radius: 4px;
     padding: 4px;
-    font-size: 16px;
+    font-size: 14px;
     border: none;
   }
   button {
+    width: 100px;
     border: none;
     border-radius: 4px;
+    background-color: #fff;
+    color: #3480eb;
     padding: 8px;
     cursor: pointer;
+    font-weight: bold;
+    &:hover {
+      opacity: 0.8;
+    }
   }
 `;
 export default React.memo(DraggableElement);

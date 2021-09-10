@@ -7,6 +7,7 @@ export const fetchProjects = createAsyncThunk(
   `${KEY}/fetchProjects`,
   async () => {
     const project = await axios.get("/projects");
+    console.log(process.env);
     return project.data;
   }
 );

@@ -1,17 +1,14 @@
 FROM node
 
-RUN mkdir -p /opt/app
-WORKDIR /opt/app
+WORKDIR /usr/app
 
-RUN npm i npm@latest -g
+COPY package*.json ./
 
-WORKDIR /opt
-COPY package.json package-lock.json* ./
-RUN npm install 
-ENV PATH /opt/node_modules/.bin:$PATH
+RUN npm install
 
-WORKDIR /opt/app
-COPY . /opt/app
+RUN mkdir node_modules/.cache && chmod -R 777 node_modules/.cache
+
+COPY . .
 
 CMD ["npm", "start"]
 

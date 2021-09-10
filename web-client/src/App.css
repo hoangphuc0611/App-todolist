@@ -1,3 +1,10 @@
+body::-webkit-scrollbar {
+  width: 8px;
+}
+body::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  outline: 1px solid slategrey;
+}
 .wrapper {
   max-width: 1440px;
   margin: 0 auto;

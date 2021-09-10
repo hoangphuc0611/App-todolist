@@ -41,15 +41,15 @@ function ValidModel({ openValidModel, setOpenValidModel, project }) {
       <FormContent>
         <ion-icon onClick={closeModal} name="close-circle-outline"></ion-icon>
         <form onSubmit={handleSubmit}>
-          <label>Vui lòng nhập password để vào</label>
+          <label>Please enter password</label>
           <input
-            placeholder="Nhập password"
+            placeholder="Passwrod"
             type="password"
             required
             onChange={(e) => setInput(e.target.value)}
           />
-          <button type="submit">Xác nhận</button>
-          {!check && <span>Mật khẩu sai vui lòng nhập lại!</span>}
+          <button type="submit">Confirm</button>
+          {!check && <span>Password not match. Please try again!</span>}
         </form>
       </FormContent>
     </Modal>
@@ -88,6 +88,7 @@ const FormContent = styled.div`
       border-radius: 4px;
       border: none;
       background-color: #4290f5;
+      cursor: pointer;
       color: #fff;
       margin-bottom: 10px;
     }
@@ -98,6 +99,9 @@ const FormContent = styled.div`
       border-radius: 4px;
       outline: none;
       border: none;
+    }
+    span {
+      color: red;
     }
   }
 `;

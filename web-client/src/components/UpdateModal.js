@@ -61,10 +61,10 @@ function UpdateModel({
       <FormContent>
         <ion-icon onClick={closeModal} name="close-circle-outline"></ion-icon>
         <form onSubmit={handleSubmit}>
-          <label>Nhập nội dung cần thay đổi</label>
+          <label>Upadate Modal</label>
           <input
             value={input}
-            placeholder="Nhập nội dung mới"
+            placeholder="..."
             type="text"
             required
             onChange={(e) => setInput(e.target.value)}

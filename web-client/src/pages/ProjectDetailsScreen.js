@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { auth } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -7,7 +7,6 @@ import ChatInput from "../components/ChatInput";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProjectById } from "../redux/projectSlice";
 import Message from "../components/Message";
-import Member from "../components/Member";
 import DragList from "../components/DragList";
 import { fetchMessages } from "../redux/chatSlice";
 import { fetchTasksByProjectId } from "../redux/taskSlice";
@@ -32,7 +31,7 @@ function ProjectDetailsScreen(props) {
     chatRef?.current.scrollIntoView({
       behavior: "smooth",
     });
-  }, [dispatch]);
+  }, [dispatch, user]);
   return (
     <ProjectDetailsContainer>
       <ProjectDetailsTaskBoardContent>
@@ -48,12 +47,6 @@ function ProjectDetailsScreen(props) {
         </TaskBoardMain>
       </ProjectDetailsTaskBoardContent>
       <ProjectDetailsGroupChatContent>
-        <MemberGroup>
-          <p>Thành viên</p>
-          <ListMember>
-            <Member />
-          </ListMember>
-        </MemberGroup>
         <GroupChat>
           <p>Group Chat</p>
           <GroupChatContent id="chat">
@@ -78,14 +71,18 @@ function ProjectDetailsScreen(props) {
 }
 
 const ProjectDetailsContainer = styled.div`
+  min-height: 100vh;
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
+  margin: 20px 0;
+  @media (max-width: 1025px) {
+    flex-direction: column;
+    padding: 0 10px;
+  }
 `;
 const ProjectDetailsTaskBoardContent = styled.div`
   flex: 2;
   width: 100%;
-  border-right: 1px solid #ccc;
 `;
 const ProjectDetailsGroupChatContent = styled.div`
   flex: 1;
@@ -109,29 +106,27 @@ const TaskBoarTime = styled.div`
     font-size: 16px;
   }
 `;
-const MemberGroup = styled.div`
-  width: 100%;
-  padding: 2px 8px;
-`;
-const ListMember = styled.div`
-  display: flex;
-  align-items: center;
-`;
 const GroupChat = styled.div`
-  padding: 8px;
+  padding: 0 8px;
+  border-left: 1px solid #ccc;
+
   p {
     font-size: 18px;
     font-weight: bold;
   }
+  @media (max-width: 1025px) {
+    border-left: none;
+  }
 `;
 const GroupChatContent = styled.div`
-  width: 100%;
   padding: 0 8px;
   height: 340px;
-  margin: 0 auto;
   flex-grow: 1;
   overflow-y: scroll;
   border-radius: 4px;
+  @media (max-width: 1025px) {
+    border: 1px solid #ccc;
+  }
 `;
 const ListChat = styled.div`
   display: flex;

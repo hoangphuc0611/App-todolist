@@ -39,7 +39,7 @@ function Project({ project, user }) {
           </ActionContent>
           <ActionContent onClick={() => setOpenUpdateModal(true)}>
             <ion-icon name="hammer-outline"></ion-icon>
-            <span>Edit</span>
+            <span>Update</span>
           </ActionContent>
         </MoreContent>
       )}
@@ -72,8 +72,9 @@ const Container = styled.div`
 `;
 const HommeScreenMainElement = styled.div`
   padding: 10px;
-  -webkit-box-shadow: 6px 6px 8px 0px rgba(0, 0, 0, 0.4);
-  box-shadow: 6px 6px 8px 0px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: 0px 10px 13px -7px #000000,
+    8px -7px 13px -8px rgba(0, 0, 0, 0.6);
+  box-shadow: 0px 10px 13px -7px #000000, 8px -7px 13px -8px rgba(0, 0, 0, 0.6);
   border-radius: 10px;
   background-color: #3480eb;
   color: #fff;

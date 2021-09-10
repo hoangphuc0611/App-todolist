@@ -21,10 +21,6 @@ function Header() {
           alt="logo"
         />
       </Link>
-      <SearchContent>
-        <input placeholder="Search" type="text" required />
-        <ion-icon name="search-outline"></ion-icon>
-      </SearchContent>
       <MenuContent>
         {user ? (
           <>
@@ -33,6 +29,7 @@ function Header() {
           </>
         ) : (
           <LoginContent onClick={signIn}>
+            <span>Login</span>
             <ion-icon name="log-in-outline"></ion-icon>
           </LoginContent>
         )}
@@ -41,48 +38,30 @@ function Header() {
   );
 }
 const HeaderContainer = styled.div`
-  padding: 10px 0;
-  background-color: #ccc;
+  padding: 4px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  background-color: #3480eb;
 `;
 const ImgaeLogo = styled.img`
   width: 60px;
   height: 60px;
   border-radius: 50%;
 `;
-const SearchContent = styled.div`
-  display: flex;
-  align-items: stretch;
-  background-color: white;
-  border-radius: 4px;
-  padding: 4px;
-  input {
-    width: 400px;
-    outline: none;
-    border: none;
-    @media screen and (max-width: 767px) {
-      width: 200px;
-    }
-  }
-  ion-icon {
-    background-color: #3480eb;
-    border-radius: 50%;
-    padding: 4px;
-    color: #fff;
-    cursor: pointer;
-    font-weight: bold;
-  }
-`;
 const MenuContent = styled.div`
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   ion-icon {
     width: 26px;
     height: 26px;
     margin-left: 2px;
     cursor: pointer;
+    color: #fff;
+    transition: all 0.25s ease-in;
+    &:hover {
+      opacity: 0.7;
+    }
   }
 `;
 const AvatarUser = styled.img`
@@ -95,10 +74,16 @@ const AvatarUser = styled.img`
 
 const LoginContent = styled.div`
   display: flex;
-  align-items: center;
-  padding: 4px;
-  background-color: #3480eb;
-  border-radius: 50%;
+  align-items: stretch;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: initial;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.25s ease-in;
+  &:hover {
+    opacity: 0.7;
+  }
 `;
 
 export default Header;
