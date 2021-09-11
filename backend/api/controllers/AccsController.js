@@ -17,8 +17,15 @@ module.exports = {
         let data = req.body;
         let sql = 'INSERT INTO Account_user SET ?'
         db.query(sql, [data], (err, response) => {
-            if (err) throw err
-            res.json(response)
+            if (err) {
+                res.status(404).send({
+                    message: "Thông tin tài khoản đăng kí không hợp lệ",
+                  });
+            }
+            else{
+                res.json(data)
+            }
+            
         })
     }
 }

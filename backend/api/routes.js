@@ -16,18 +16,20 @@ module.exports = function (app) {
 
   app.get('/projects', projectsCtrl.get);
 
+  
+  app.post('/accs', accCtrl.store);
   app.post('/login', (req, res) => {
-    const data = req.body;
-    var accessToken = jwt.sign(data, process.env.ACCESS_TOKEN_SECRET, {
+    const user = req.body;
+    var accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
       expiresIn: '10h'
     });
 
     let sql = 'SELECT * FROM Account_user where username=? and passwd=?'
     var x = 0;
-    db.query(sql, [data.username, data.passwd], (err, response) => {
+    db.query(sql, [user.username, user.passwd], (err, response) => {
 
       if (response.length) {
-        res.json({ accessToken });
+        res.json({ accessToken, response });
         console.log(response[0])
       }
       else {
@@ -38,6 +40,10 @@ module.exports = function (app) {
     });
   });
   app.use(authenToken.isAuth);
+
+  app.get('/accs', accCtrl.get);
+  
+
   app.post('/projects', projectsCtrl.store);
   app.put('/projects', projectsCtrl.updates);
 
@@ -49,8 +55,7 @@ module.exports = function (app) {
 
   // todoList Routes
 
-  app.get('/accs', accCtrl.get);
-  app.post('/accs', accCtrl.store);
+  
 
 
   app.route('/messages')
