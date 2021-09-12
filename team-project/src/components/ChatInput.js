@@ -1,12 +1,11 @@
 import React, { useState } from "react";
-import { useAuthState } from "react-firebase-hooks/auth";
 import styled from "styled-components";
-import { auth } from "../firebase";
 import { addMessage } from "../redux/chatSlice";
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 function ChatInput({ id, chatRef }) {
   const [input, setInput] = useState("");
-  const [user] = useAuthState(auth);
+  const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const sendMessage = (e) => {
     e.preventDefault();
@@ -15,8 +14,8 @@ function ChatInput({ id, chatRef }) {
     }
     const data = {
       message: input,
-      userEmail: user?.email,
-      userImage: user?.photoURL,
+      userEmail: user.username,
+      userImage: user.img,
       project_ID: id,
       createdAt: new Date().toISOString(),
     };
@@ -59,4 +58,4 @@ const ChatInputContainer = styled.div`
     display: none !important;
   }
 `;
-export default ChatInput;
+export default React.memo(ChatInput);

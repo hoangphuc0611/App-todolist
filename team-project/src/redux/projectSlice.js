@@ -1,48 +1,70 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const KEY = "projects";
 
 export const fetchProjects = createAsyncThunk(
   `${KEY}/fetchProjects`,
   async () => {
-    const project = await axios.get("/projects");
-    console.log(process.env);
-    return project.data;
+    try {
+      const project = await axios.get("/projects");
+      return project.data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 export const fetchProjectById = createAsyncThunk(
   `${KEY}/fetchProjectById`,
   async (id) => {
-    const project = await axios.get(`/projects/${id}`);
-    return project.data;
+    try {
+      const rs = await axios.get(`/projects/${id}`, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) return rs.data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 export const addProject = createAsyncThunk(
   `${KEY}/addProject`,
   async (data) => {
-    const rs = await axios.post("/projects", data);
-    if (rs.status === 200) {
-      return data;
-    } else return NaN;
+    try {
+      const rs = await axios.post("/projects", data, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) return data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 export const updateProject = createAsyncThunk(
   `${KEY}/updateProject`,
   async (data) => {
-    const rs = await axios.put(`/projects/${data.project_ID}`, data);
-    if (rs.status === 200) {
-      return data;
-    } else return NaN;
+    try {
+      const rs = await axios.put(`/projects/${data.project_ID}`, data, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) return data;
+    } catch (error) {
+      return error;
+    }
   }
 );
 export const deleteProject = createAsyncThunk(
   `${KEY}/deleteProject`,
   async (id) => {
-    const rs = await axios.delete(`/projects/${id}`);
-    if (rs.status === 200) {
-      return id;
-    } else return NaN;
+    try {
+      const rs = await axios.delete(`/projects/${id}`, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) return id;
+    } catch (error) {
+      return error;
+    }
   }
 );
 

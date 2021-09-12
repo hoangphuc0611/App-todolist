@@ -1,13 +1,12 @@
 import React from "react";
 import styled from "styled-components";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
+import { useSelector } from "react-redux";
 
 function Message({ message, timestamp, userEmail, userImage }) {
-  const [user] = useAuthState(auth);
+  const { user } = useSelector((state) => state.user);
   return (
     <>
-      {user?.email === userEmail ? (
+      {user.username === userEmail ? (
         <ElemetMeChat>
           <img src={userImage} alt="avatar__member" />
           <MessageContent>

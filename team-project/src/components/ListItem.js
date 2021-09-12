@@ -9,6 +9,7 @@ const Avatar = styled.img`
   width: 30px;
   border: 3px solid white;
   border-radius: 50%;
+  object-fit: cover;
 `;
 const Author = styled.div`
   display: flex;

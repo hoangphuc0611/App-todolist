@@ -2,12 +2,10 @@ import { Droppable } from "react-beautiful-dnd";
 import ListItem from "./ListItem";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { addTasksByProjectId } from "../redux/taskSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 function DraggableElement({ prefix, elements, id }) {
-  const [user] = useAuthState(auth);
+  const { user } = useSelector((state) => state.user);
   const [openModal, setOpenModal] = useState(false);
   const [input, setInput] = useState("");
   const dispatch = useDispatch();
@@ -18,8 +16,8 @@ function DraggableElement({ prefix, elements, id }) {
     const data = {
       createdAt: new Date().toISOString(),
       content: input,
-      userEmailCreator: user?.email,
-      userImageCreator: user?.photoURL,
+      userEmailCreator: user.username,
+      userImageCreator: user.img,
       typeTask: prefix,
       project_ID: id,
     };

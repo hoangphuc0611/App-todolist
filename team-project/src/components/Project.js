@@ -10,7 +10,7 @@ function Project({ project, user }) {
   const [openUpdateModal, setOpenUpdateModal] = useState(false);
   const dispatch = useDispatch();
   const handleClick = () => {
-    if (user) setOpenValidModel(true);
+    if (user.username) setOpenValidModel(true);
     else {
       alert("Vui lòng đăng nhập!");
     }
@@ -44,7 +44,7 @@ function Project({ project, user }) {
         </MoreContent>
       )}
       <HommeScreenMainElement>
-        {user && user.email === project.projectCreatorName && (
+        {user && user.username === project.projectCreatorName && (
           <IonConten onClick={() => setOpenAction(!openAction)}>
             {!openAction ? (
               <ion-icon name="menu-outline"></ion-icon>

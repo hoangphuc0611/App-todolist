@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import Project from "../components/Project";
 import Modal from "../components/Modal";
 import { useDispatch, useSelector } from "react-redux";
@@ -13,7 +11,7 @@ function HomeScreen() {
   const { isLoading, projects } = useSelector((state) => state.projects);
   const [curentProjects, setCurentProjects] = useState(projects);
   const [input, setInput] = useState("");
-  const [user] = useAuthState(auth);
+  const { user } = useSelector((state) => state.user);
   const handleOpenModel = () => {
     setOpenModel(!openModel);
   };

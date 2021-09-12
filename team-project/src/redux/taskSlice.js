@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import Cookie from "js-cookie";
 
 const KEY = "tasks";
 
@@ -7,8 +8,10 @@ export const fetchTasksByProjectId = createAsyncThunk(
   `${KEY}/fetchTasksByProjectId`,
   async (id) => {
     try {
-      const tasks = await axios.get(`/tasks/${id}`);
-      return tasks.data;
+      const rs = await axios.get(`/tasks/${id}`, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) return rs.data;
     } catch (error) {
       return error;
     }
@@ -18,7 +21,9 @@ export const addTasksByProjectId = createAsyncThunk(
   `${KEY}/addTasksByProjectId`,
   async (data) => {
     try {
-      const rs = await axios.post(`/tasks/${data.project_ID}`, data);
+      const rs = await axios.post(`/tasks/${data.project_ID}`, data, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
       if (rs.status === 200) {
         if (rs.data?.length > 0) return rs.data[0];
       }
@@ -33,7 +38,10 @@ export const updateTaskId = createAsyncThunk(
     try {
       const rs = await axios.put(
         `/tasks/${task.project_ID}/${task.task_ID}`,
-        task
+        task,
+        {
+          headers: { Authorization: Cookie.get("access_token") },
+        }
       );
       if (rs.status === 200) return task;
     } catch (error) {
@@ -46,7 +54,10 @@ export const deleteTask = createAsyncThunk(
   async (task) => {
     try {
       const rs = await axios.delete(
-        `/tasks/${task.project_ID}/${task.task_ID}`
+        `/tasks/${task.project_ID}/${task.task_ID}`,
+        {
+          headers: { Authorization: Cookie.get("access_token") },
+        }
       );
       if (rs.status === 200) return task.task_ID;
     } catch (error) {

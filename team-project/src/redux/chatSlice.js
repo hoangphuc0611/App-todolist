@@ -1,21 +1,30 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
-const KEY = "chat";
+import Cookie from "js-cookie";
 
+const KEY = "chat";
 export const addMessage = createAsyncThunk(
   `${KEY}/addMessage`,
   async (data) => {
-    const rs = await axios.post(`/messages/${data.project_ID}`, data);
-    if (rs.status === 200) {
-      return data;
-    } else return NaN;
+    try {
+      const rs = await axios.post(`/messages/${data.project_ID}`, data, {
+        headers: { Authorization: Cookie.get("access_token") },
+      });
+      if (rs.status === 200) {
+        return data;
+      }
+    } catch (error) {
+      return error;
+    }
   }
 );
 export const fetchMessages = createAsyncThunk(
   `${KEY}/fetchMessages`,
   async (id) => {
-    const messages = await axios.get(`/messages/${id}`);
-    return messages.data;
+    const rs = await axios.get(`/messages/${id}`, {
+      headers: { Authorization: Cookie.get("access_token") },
+    });
+    if (rs.status === 200) return rs.data;
   }
 );
 export const chatSlice = createSlice({

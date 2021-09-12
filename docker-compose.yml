@@ -46,15 +46,15 @@ services:
     container_name: moe-phpmyadmin-app
   web-client:
     build:
-      context: ./web-client
+      context: ./team-project
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
     expose:
       - "3000"
     volumes:
-      - ./web-client:/opt/app:delegated
-      - ./web-client/package.json:/opt/package.json
+      - ./team-project:/opt/app:delegated
+      - ./team-project/package.json:/opt/package.json
       - ./web-client/package-lock.json:/opt/package-lock.json
       - notused:/opt/app/node_modules
     networks:

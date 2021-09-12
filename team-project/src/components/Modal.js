@@ -14,8 +14,8 @@ function Modal({ dispatch, user, setOpenModel }) {
         createdAt: new Date().toISOString(),
         projectName: formProject.projectName,
         projectPassword: formProject.projectPassword,
-        projectCreatorName: user?.email,
-        projectCreatorAvatar: user?.photoURL,
+        projectCreatorName: user.username,
+        projectCreatorAvatar: user.img,
       };
       dispatch(addProject(data));
       window.location.reload();

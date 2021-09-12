@@ -1,7 +1,5 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
-import { auth } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { useHistory } from "react-router-dom";
 import ChatInput from "../components/ChatInput";
 import { useDispatch, useSelector } from "react-redux";
@@ -15,13 +13,13 @@ function ProjectDetailsScreen(props) {
   const id = props.match.params.id;
   const chatRef = useRef(null);
   const dispatch = useDispatch();
-  const [user] = useAuthState(auth);
   const history = useHistory();
   const { project } = useSelector((state) => state.projects);
   const { messages } = useSelector((state) => state.chat);
+  const { user } = useSelector((state) => state.user);
   const { isLoading, tasks } = useSelector((state) => state.tasks);
   useEffect(() => {
-    if (user) {
+    if (user.username) {
       dispatch(fetchProjectById(id));
       dispatch(fetchTasksByProjectId(id));
       dispatch(fetchMessages(id));
@@ -53,17 +51,17 @@ function ProjectDetailsScreen(props) {
             <ListChat>
               {messages?.map((message) => (
                 <Message
-                  key={message?.message_ID}
-                  message={message?.message}
-                  timestamp={message?.createdAt}
-                  userEmail={message?.userEmail}
-                  userImage={message?.userImage}
+                  key={message.message_ID}
+                  message={message.message}
+                  timestamp={message.createdAt}
+                  userEmail={message.userEmail}
+                  userImage={message.userImage}
                 />
               ))}
               <ChatBottom ref={chatRef} />
             </ListChat>
           </GroupChatContent>
-          <ChatInput id={id} ref={chatRef} />
+          <ChatInput id={id} chatRef={chatRef} />
         </GroupChat>
       </ProjectDetailsGroupChatContent>
     </ProjectDetailsContainer>
@@ -109,7 +107,6 @@ const TaskBoarTime = styled.div`
 const GroupChat = styled.div`
   padding: 0 8px;
   border-left: 1px solid #ccc;
-
   p {
     font-size: 18px;
     font-weight: bold;
@@ -135,7 +132,7 @@ const ListChat = styled.div`
   margin-top: 10px;
 `;
 const ChatBottom = styled.div`
-  padding-bottom: 20px;
+  padding-bottom: 40px;
 `;
 const TaskBoardMain = styled.div`
   margin-top: 20px;

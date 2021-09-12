@@ -1,18 +1,15 @@
 import styled from "styled-components";
-import { auth, provider } from "../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
 import { Link } from "react-router-dom";
-
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { userLogOut } from "../redux/userSlice";
 function Header() {
-  const [user] = useAuthState(auth);
-  const signIn = async () => {
-    await auth.signInWithPopup(provider).catch((error) => {
-      alert(error.message);
-    });
+  const dispatch = useDispatch();
+  const signOut = () => {
+    dispatch(userLogOut());
   };
-  const signOut = async () => {
-    await auth.signOut();
-  };
+  const { isLoading, user } = useSelector((state) => state.user);
+  useEffect(() => {}, [isLoading]);
   return (
     <HeaderContainer>
       <Link to="/">
@@ -22,15 +19,18 @@ function Header() {
         />
       </Link>
       <MenuContent>
-        {user ? (
+        {user.img ? (
           <>
-            <AvatarUser src={user?.photoURL} alt="avatar" />
+            <AvatarUser src={user?.img} alt="avatar" />
             <ion-icon name="log-in-outline" onClick={signOut}></ion-icon>
           </>
         ) : (
-          <LoginContent onClick={signIn}>
-            <span>Login</span>
-            <ion-icon name="log-in-outline"></ion-icon>
+          <LoginContent>
+            <Link to="/login">
+              <IconContent>
+                <img src="./enter.png" alt="icon" />
+              </IconContent>
+            </Link>
           </LoginContent>
         )}
       </MenuContent>
@@ -79,11 +79,21 @@ const LoginContent = styled.div`
   border-radius: 4px;
   color: initial;
   cursor: pointer;
-  color: #fff;
   transition: all 0.25s ease-in;
   &:hover {
     opacity: 0.7;
   }
 `;
-
+const IconContent = styled.div`
+  background-color: #fff;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  padding: 6px;
+  img {
+    height: 26px;
+    width: 26px;
+    object-fit: cover;
+  }
+`;
 export default Header;
