@@ -1,28 +1,31 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { addMessage } from "../redux/chatSlice";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-function ChatInput({ id, chatRef }) {
+import { useDispatch, useSelector } from "react-redux";
+import { db } from "../firebase";
+function ChatInput({ id }) {
   const [input, setInput] = useState("");
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const sendMessage = (e) => {
     e.preventDefault();
     if (!id) {
-      return false;
+      return;
     }
     const data = {
+      project_ID: id,
       message: input,
       userEmail: user.username,
       userImage: user.img,
-      project_ID: id,
       createdAt: new Date().toISOString(),
     };
-    dispatch(addMessage(data));
-    chatRef?.current.scrollIntoView({
-      behavior: "smooth",
+    db.collection("rooms").doc(id).collection("messages").add({
+      message: input,
+      userEmail: user.username,
+      userImage: user.img,
+      createdAt: new Date().toISOString(),
     });
+    dispatch(addMessage(data));
     setInput("");
   };
   return (
@@ -32,6 +35,7 @@ function ChatInput({ id, chatRef }) {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Enter something..."
+          required
         />
         <button hidden type="submit" onClick={sendMessage}>
           SEND

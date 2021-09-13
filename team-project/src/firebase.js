@@ -1,17 +1,13 @@
 import firebase from "firebase";
 const firebaseConfig = {
-  apiKey: "AIzaSyDPuYlXgui_Y00ILWVbGHlKh1WsbKc62Js",
-  authDomain: "team-project-802c5.firebaseapp.com",
-  projectId: "team-project-802c5",
-  storageBucket: "team-project-802c5.appspot.com",
-  messagingSenderId: "685208731388",
-  appId: "1:685208731388:web:5c4f1106ef572e555c2179",
-  measurementId: "G-LYFGKK1X9P",
+  apiKey: "AIzaSyCSsfxMuSZmHErrDPQ9EE2DEtvfga4JO80",
+  authDomain: "team-project-db.firebaseapp.com",
+  projectId: "team-project-db",
+  storageBucket: "team-project-db.appspot.com",
+  messagingSenderId: "505714360028",
+  appId: "1:505714360028:web:e68499efab0ddab6acfe19",
+  measurementId: "G-088JFK70KZ",
 };
-
 const firebaseApp = firebase.initializeApp(firebaseConfig);
 const db = firebaseApp.firestore();
-const auth = firebase.auth();
-const provider = new firebase.auth.GoogleAuthProvider();
-
-export { auth, provider, db };
+export { db };

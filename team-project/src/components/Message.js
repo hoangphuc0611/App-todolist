@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 
 function Message({ message, timestamp, userEmail, userImage }) {
   const { user } = useSelector((state) => state.user);
+  console.log(user);
   return (
     <>
       {user.username === userEmail ? (

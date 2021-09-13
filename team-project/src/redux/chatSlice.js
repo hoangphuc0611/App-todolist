@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookie from "js-cookie";
-
 const KEY = "chat";
 export const addMessage = createAsyncThunk(
   `${KEY}/addMessage`,

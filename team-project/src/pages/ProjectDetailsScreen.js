@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
 import { useHistory } from "react-router-dom";
 import ChatInput from "../components/ChatInput";
@@ -9,15 +9,25 @@ import DragList from "../components/DragList";
 import { fetchMessages } from "../redux/chatSlice";
 import { fetchTasksByProjectId } from "../redux/taskSlice";
 import Loading from "../components/Loading";
+import ReactScrollableFeed from "react-scrollable-feed";
+import { db } from "../firebase";
+import { useCollection } from "react-firebase-hooks/firestore";
+
 function ProjectDetailsScreen(props) {
   const id = props.match.params.id;
-  const chatRef = useRef(null);
   const dispatch = useDispatch();
   const history = useHistory();
   const { project } = useSelector((state) => state.projects);
-  const { messages } = useSelector((state) => state.chat);
   const { user } = useSelector((state) => state.user);
   const { isLoading, tasks } = useSelector((state) => state.tasks);
+  const [roomMessages, loading] = useCollection(
+    id &&
+      db
+        .collection("rooms")
+        .doc(id)
+        .collection("messages")
+        .orderBy("createdAt", "asc")
+  );
   useEffect(() => {
     if (user.username) {
       dispatch(fetchProjectById(id));
@@ -26,10 +36,7 @@ function ProjectDetailsScreen(props) {
     } else {
       history.push("/");
     }
-    chatRef?.current.scrollIntoView({
-      behavior: "smooth",
-    });
-  }, [dispatch, user]);
+  }, [dispatch, user, loading]);
   return (
     <ProjectDetailsContainer>
       <ProjectDetailsTaskBoardContent>
@@ -48,20 +55,34 @@ function ProjectDetailsScreen(props) {
         <GroupChat>
           <p>Group Chat</p>
           <GroupChatContent id="chat">
-            <ListChat>
-              {messages?.map((message) => (
-                <Message
-                  key={message.message_ID}
-                  message={message.message}
-                  timestamp={message.createdAt}
-                  userEmail={message.userEmail}
-                  userImage={message.userImage}
-                />
-              ))}
-              <ChatBottom ref={chatRef} />
-            </ListChat>
+            <ReactScrollableFeed>
+              <ListChat>
+                {roomMessages?.docs.map((doc) => {
+                  const { message, createdAt, userEmail, userImage } =
+                    doc.data();
+                  return (
+                    <Message
+                      key={doc.id}
+                      message={message}
+                      timestamp={createdAt}
+                      userEmail={userEmail}
+                      userImage={userImage}
+                    />
+                  );
+                })}
+                {/*                 {messages?.map((message) => (
+                  <Message
+                    key={message.message_ID}
+                    message={message.message}
+                    timestamp={message.createdAt}
+                    userEmail={message.userEmail}
+                    userImage={message.userImage}
+                  />
+                ))} */}
+              </ListChat>
+            </ReactScrollableFeed>
           </GroupChatContent>
-          <ChatInput id={id} chatRef={chatRef} />
+          <ChatInput id={id} />
         </GroupChat>
       </ProjectDetailsGroupChatContent>
     </ProjectDetailsContainer>
@@ -119,7 +140,6 @@ const GroupChatContent = styled.div`
   padding: 0 8px;
   height: 340px;
   flex-grow: 1;
-  overflow-y: scroll;
   border-radius: 4px;
   @media (max-width: 1025px) {
     border: 1px solid #ccc;
@@ -130,9 +150,6 @@ const ListChat = styled.div`
   flex-direction: column;
   justify-content: flex-start;
   margin-top: 10px;
-`;
-const ChatBottom = styled.div`
-  padding-bottom: 40px;
 `;
 const TaskBoardMain = styled.div`
   margin-top: 20px;
