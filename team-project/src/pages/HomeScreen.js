@@ -5,13 +5,15 @@ import Modal from "../components/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProjects } from "../redux/projectSlice";
 import Loading from "../components/Loading";
+
 function HomeScreen() {
   const dispatch = useDispatch();
+  const [content, setContent] = useState(["đóng", "Dự án", "tìm kiếm"]);
   const [openModel, setOpenModel] = useState(false);
   const { isLoading, projects } = useSelector((state) => state.projects);
   const [curentProjects, setCurentProjects] = useState(projects);
   const [input, setInput] = useState("");
-  const { user } = useSelector((state) => state.user);
+  const { user, language } = useSelector((state) => state.user);
   const handleOpenModel = () => {
     setOpenModel(!openModel);
   };
@@ -26,6 +28,7 @@ function HomeScreen() {
       setCurentProjects(filterdProjects);
     }
   };
+
   useEffect(() => {
     dispatch(fetchProjects());
   }, [dispatch]);
@@ -62,14 +65,14 @@ function HomeScreen() {
       {!isLoading ? (
         <HommeScreenMain>
           {input.length > 1
-            ? curentProjects.map((project) => (
+            ? curentProjects?.map((project) => (
                 <Project
                   key={project?.project_ID}
                   project={project}
                   user={user}
                 />
               ))
-            : projects.map((project) => (
+            : projects?.map((project) => (
                 <Project
                   key={project?.project_ID}
                   project={project}

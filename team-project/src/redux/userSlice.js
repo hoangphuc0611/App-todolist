@@ -9,7 +9,7 @@ export const userLogin = createAsyncThunk(`${KEY}/userLogin`, async (user) => {
     const rs = await axios.post(`/login`, user);
     if (rs.status === 200) {
       const accessToken = rs.data?.accessToken;
-      const user = rs.data?.response[0];
+      const user = rs.data?.response;
       Cookie.set("access_token", accessToken);
       Cookie.set("userInfo", JSON.stringify(user));
       const data = { accessToken, user };
@@ -24,11 +24,12 @@ export const userSignUp = createAsyncThunk(
   async (user) => {
     try {
       const rs = await axios.post(`/accs`, user);
-      if (rs.status === 200) {
-        return rs.data;
-      }
+      return rs.data;
     } catch (error) {
-      return error;
+      return {
+        success: false,
+        message: "Tài khoản đã tồn tại",
+      };
     }
   }
 );
@@ -40,6 +41,16 @@ export const userLogOut = createAsyncThunk(`${KEY}/userLogOut`, async () => {
     return error;
   }
 });
+export const userChangeLanguage = createAsyncThunk(
+  `${KEY}/userChangeLanguage`,
+  async (language) => {
+    try {
+      return language;
+    } catch (error) {
+      return error;
+    }
+  }
+);
 const userSlice = createSlice({
   name: KEY,
   initialState: {
@@ -47,6 +58,8 @@ const userSlice = createSlice({
     isError: false,
     user: Cookie.getJSON("userInfo") || {},
     accessToken: "",
+    language: true,
+    message: "",
   },
   reducers: {
     setLoading: (state, action) => {
@@ -75,8 +88,10 @@ const userSlice = createSlice({
     },
     [userSignUp.fulfilled]: (state, action) => {
       const data = action.payload;
-      if (data.username) state.isError = false;
+      console.log(data);
+      if (data.success) state.isError = false;
       else state.isError = true;
+      state.message = data.message;
       state.isLoading = false;
     },
     [userSignUp.rejected]: (state, action) => {
@@ -91,6 +106,15 @@ const userSlice = createSlice({
       state.isLoading = false;
     },
     [userLogOut.rejected]: (state, action) => {
+      state.isLoading = false;
+    },
+    [userChangeLanguage.pending]: (state, action) => {
+      state.isLoading = true;
+    },
+    [userChangeLanguage.fulfilled]: (state, action) => {
+      state.language = action.payload;
+    },
+    [userChangeLanguage.rejected]: (state, action) => {
       state.isLoading = false;
     },
   },
